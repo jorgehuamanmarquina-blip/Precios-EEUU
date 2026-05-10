@@ -6,108 +6,146 @@
 <title>Calculadora de Ganancias</title>
 
 <style>
-    body{
-        font-family: Arial, sans-serif;
-        background:#f4f4f4;
-        padding:40px;
-    }
 
-    .contenedor{
-        max-width:500px;
-        margin:auto;
-        background:white;
-        padding:25px;
-        border-radius:15px;
-        box-shadow:0 0 10px rgba(0,0,0,0.1);
-    }
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    padding:40px;
+}
 
-    h2{
-        text-align:center;
-    }
+.contenedor{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
 
-    input{
-        width:100%;
-        padding:12px;
-        font-size:18px;
-        margin-top:10px;
-        border-radius:10px;
-        border:1px solid #ccc;
-    }
+h2{
+    text-align:center;
+}
 
-    button{
-        width:100%;
-        padding:12px;
-        margin-top:15px;
-        border:none;
-        border-radius:10px;
-        background:#007bff;
-        color:white;
-        font-size:18px;
-        cursor:pointer;
-    }
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    margin-bottom:10px;
+    font-size:18px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
 
-    .resultado{
-        margin-top:20px;
-        background:#f9f9f9;
-        padding:15px;
-        border-radius:10px;
-    }
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#007bff;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    margin-top:10px;
+}
 
-    p{
-        font-size:18px;
-    }
+.resultado{
+    margin-top:20px;
+    background:#f9f9f9;
+    padding:15px;
+    border-radius:10px;
+}
+
+hr{
+    margin:30px 0;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div class="contenedor">
 
-<h2>Calculadora de Ganancias</h2>
+<h2>Calculadora USA</h2>
 
-<label>Precio del producto en dólares:</label>
-<input type="number" id="precio" placeholder="Ejemplo: 48">
+<label>Precio del producto en dólares</label>
+<input type="number" id="precioUSA" placeholder="Ejemplo: 48">
 
-<button onclick="calcular()">Calcular</button>
+<button onclick="calcularUSA()">Calcular Precio Venta</button>
 
-<div class="resultado" id="resultado"></div>
+<div class="resultado" id="resultadoUSA"></div>
+
+<hr>
+
+<h2>Calcular Margen Real</h2>
+
+<label>Costo total en soles</label>
+<input type="number" id="costoSoles" placeholder="Ejemplo: 211.68">
+
+<label>Precio de venta final en soles</label>
+<input type="number" id="ventaFinal" placeholder="Ejemplo: 300">
+
+<button onclick="calcularMargen()">Calcular Margen</button>
+
+<div class="resultado" id="resultadoMargen"></div>
 
 </div>
 
 <script>
 
-function calcular(){
+function calcularUSA(){
 
-    let precio = parseFloat(document.getElementById("precio").value);
+    let precio = parseFloat(document.getElementById("precioUSA").value);
 
     if(isNaN(precio)){
-        alert("Ingresa un número válido");
+        alert("Ingresa un precio válido");
         return;
     }
 
-    // COSTO REAL
     let costo = precio * 1.26 * 3.5;
-
-    // fórmula correcta:
-    // venta = costo / (1 - margen)
 
     let venta15 = costo / (1 - 0.15);
     let venta20 = costo / (1 - 0.20);
     let venta25 = costo / (1 - 0.25);
     let venta30 = costo / (1 - 0.30);
 
-    document.getElementById("resultado").innerHTML = `
+    document.getElementById("resultadoUSA").innerHTML = `
+
         <p><strong>Costo final:</strong> S/ ${costo.toFixed(2)}</p>
 
         <hr>
 
-        <p>Ganancia 15% → <strong>S/ ${venta15.toFixed(2)}</strong></p>
+        <p>15% → <strong>S/ ${venta15.toFixed(2)}</strong></p>
 
-        <p>Ganancia 20% → <strong>S/ ${venta20.toFixed(2)}</strong></p>
+        <p>20% → <strong>S/ ${venta20.toFixed(2)}</strong></p>
 
-        <p>Ganancia 25% → <strong>S/ ${venta25.toFixed(2)}</strong></p>
+        <p>25% → <strong>S/ ${venta25.toFixed(2)}</strong></p>
 
-        <p>Ganancia 30% → <strong>S/ ${venta30.toFixed(2)}</strong></p>
+        <p>30% → <strong>S/ ${venta30.toFixed(2)}</strong></p>
+    `;
+}
+
+function calcularMargen(){
+
+    let costo = parseFloat(document.getElementById("costoSoles").value);
+    let venta = parseFloat(document.getElementById("ventaFinal").value);
+
+    if(isNaN(costo) || isNaN(venta)){
+        alert("Completa todos los campos");
+        return;
+    }
+
+    let ganancia = venta - costo;
+
+    let margen = (ganancia / venta) * 100;
+
+    document.getElementById("resultadoMargen").innerHTML = `
+
+        <p><strong>Ganancia:</strong> S/ ${ganancia.toFixed(2)}</p>
+
+        <p><strong>Margen real:</strong> ${margen.toFixed(2)}%</p>
+
     `;
 }
 
